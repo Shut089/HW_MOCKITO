@@ -1,0 +1,8 @@
+target/
+.idea/
+.mvn/
+out/
+
+
+### Mac OS ###
+.DS_Store
