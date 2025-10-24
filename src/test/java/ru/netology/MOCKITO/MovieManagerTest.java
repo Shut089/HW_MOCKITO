@@ -8,7 +8,7 @@ import static org.junit.jupiter.api.Assertions.*;
 class MovieManagerTest {
 
     @Test // Вывод всех фильмов
-    public void allFilms(){
+    public void allFilms() {
         MovieManager manager = new MovieManager();
 
         String[] expected = {};
@@ -16,19 +16,19 @@ class MovieManagerTest {
         Assertions.assertArrayEquals(expected, actual);
     }
 
-   @Test // Добавление 1 фильма
-    public void addFilm(){
+    @Test // Добавление 1 фильма
+    public void addFilm() {
         MovieManager manager = new MovieManager();
 
         manager.addMovie("Бладшот");
 
-       String[] expected = {"Бладшот"};
-       String[] actual = manager.findAll();
-       Assertions.assertArrayEquals(expected, actual);
-   }
+        String[] expected = {"Бладшот"};
+        String[] actual = manager.findAll();
+        Assertions.assertArrayEquals(expected, actual);
+    }
 
     @Test // Добавление 3 фильма
-    public void addFilm3(){
+    public void addFilm3() {
         MovieManager manager = new MovieManager();
 
         manager.addMovie("Бладшот");
@@ -39,9 +39,10 @@ class MovieManagerTest {
         String[] actual = manager.findAll();
         Assertions.assertArrayEquals(expected, actual);
     }
+
     @Test // Фильмы в обратном порядке
-    public void findLast(){
-        MovieManager manager = new MovieManager();
+    public void findLast() {
+        MovieManager manager = new MovieManager(3);
 
         manager.addMovie("Бладшот");
         manager.addMovie("Вперед");
@@ -53,7 +54,7 @@ class MovieManagerTest {
     }
 
     @Test // Фильмы в обратном порядке
-    public void findLast5(){
+    public void findLast_equalToDefaultLimit() {
         MovieManager manager = new MovieManager();
 
         manager.addMovie("Отель Белград");
@@ -73,5 +74,55 @@ class MovieManagerTest {
         manager.addMovie("Джентельмены");
         assertArrayEquals(new String[]{}, manager.findLast());
     }
+
+    @Test
+    void zero() {
+        MovieManager manager = new MovieManager();
+        assertArrayEquals(new String[]{}, manager.findLast());
+    }
+
+    @Test
+    void findLast_negativeLimit_throws() {
+        MovieManager manager = new MovieManager(-2);
+        assertThrows(NegativeArraySizeException.class, manager::findLast);
+    }
+
+
+
+    @Test //
+    void findLast_greaterThanLimit() {
+        MovieManager manager = new MovieManager();
+
+        manager.addMovie("Бладшот");
+        manager.addMovie("Вперед");
+        manager.addMovie("Отель Белград");
+        manager.addMovie("Джентельмены");
+        manager.addMovie("Человек-невидимка");
+        manager.addMovie("Троллию Мировой тур");
+        manager.addMovie("Номер один");
+
+                String[] expected = {
+                "Номер один",
+                "Троллию Мировой тур",
+                "Человек-невидимка",
+                "Джентельмены",
+                "Отель Белград"
+        };
+        String[] actual = manager.findLast();
+        assertArrayEquals(expected, actual);
+    }
+    @Test
+    void findLast_lessThanLimit_real() {
+        MovieManager manager = new MovieManager();
+        manager.addMovie("Бладшот");
+        manager.addMovie("Вперед");
+        manager.addMovie("Отель Белград");
+
+        String[] expected = {"Отель Белград", "Вперед", "Бладшот"};
+        String[] actual = manager.findLast();
+        assertArrayEquals(expected, actual);
+    }
+
+
 
 }
